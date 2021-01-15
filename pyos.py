@@ -9,7 +9,7 @@ import json,pickle
 #values
 USERINDEX = None
 USERPASSWD = {
-    "OPTRATOR":"pyosadmin",
+    "OPERATOR":"pyosadmin",
     "GUEST":"pyosadmin"
     }
 #end
@@ -79,7 +79,7 @@ class stdout:
     DEBUG="[/]"
     GUESS="[?]"
     global USERLIST,STDPATH
-    USERLIST = ["OPTRATOR","GUEST"]
+    USERLIST = ["OPERATOR","GUEST"]
     STDPATH = ["/"]
 #End Class
 
@@ -140,9 +140,9 @@ def main():
     global OSLOGIN,USERINDEX,CMDOG,INPASSWD
     while True:
         OSLOGIN=input("Login pyos:")
-        if OSLOGIN=="OPTRATOR":
-            INPASSWD=input("Password from OPTRATOR:")
-            if INPASSWD == USERPASSWD["OPTRATOR"]:
+        if OSLOGIN=="OPERATOR":
+            INPASSWD=input("Password from OPERATOR:")
+            if INPASSWD == USERPASSWD["OPERATOR"]:
                 CMDOG="#"
                 USERINDEX=0
                 break
@@ -162,7 +162,7 @@ def main():
                 continue
         else:
             print("No user named "+OSLOGIN)
-            print("Try again with \"OPTRATOR\" or \"GUEST\"")
+            print("Try again with \"OPERATOR\" or \"GUEST\"")
             continue
     while True:
         cmd()
@@ -171,8 +171,14 @@ def main():
 if __name__ == "__main__":
     os.system("cls")
     printtitle(random.randint(1,3))
-    with open("passwd.json","w") as savpasswd:
-        json.dump(USERPASSWD,savpasswd)
+    with open("check.db",'r') as check:
+        Chk = check.read()
+        if Chk["USER_CHANGED"] == "NO":
+            with open("passwd.json","w") as savpasswd:
+                json.dump(USERPASSWD,savpasswd)
+                savpasswd.close()
+                pass
+        check.close()
         pass
     main()
 
