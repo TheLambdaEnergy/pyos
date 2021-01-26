@@ -116,7 +116,7 @@ def cmd():
         try:
             print(stdin[1])
         except IndexError as ERROR:
-            print(ERROR)
+            print("ECHO OPENED.")
             pass
     elif stdin[0]=="exit":
         sys.exit()
@@ -124,10 +124,10 @@ def cmd():
         try:
             cmdfunc.textread(stdin[1],stdin[2])
         except IndexError as ERROR:
-            print(ERROR)
+            print("Please enter both option and filename")
             pass
         except FileNotFoundError as ERROR:
-            print(ERROR)
+            print(stdout.ERROR+"File Not Found!")
             pass
     elif stdin[0]=="cd":
         cmdfunc.cd(stdin[1])
