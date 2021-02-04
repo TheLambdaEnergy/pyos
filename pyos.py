@@ -2,9 +2,10 @@
 #using namescape std
 #pyos.py-Python Optrating System
 
-import os,sys,math,cmath
+import os,sys,math,cmath,time
 import random,turtle,tkinter
 import json,pickle
+import subprocess as r
 
 #values
 USERINDEX = None
@@ -14,7 +15,7 @@ USERPASSWD = {
     }
 #end
 
- 
+
 def printtitle(TITLESTYLE):
     title1="""
 888888
@@ -50,13 +51,21 @@ def printtitle(TITLESTYLE):
 ###        ###        ####   ####  1.0
 """
     title3="""
-╔─╗
-╠  ╣
-╠━╝ ╕  ╒ ┏━┓ ┏━┓
-┃     ╰╦╯ ┃  ┃ ┃
-┃       ┃   ┃  ┃ ┗━┓
-┃       ┃   ┃  ┃     ┃
-╩     ━╯   ┗━┛ ┗━┛ 1.0
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@       @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@  @@@@  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@  @@@@  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@  @@@@  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@       @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@  @@@@@@@  @@@@@  @@    @@@    @@@@@@@@@@@@@@@@
+@  @@@@@@@@  @@@  @@  @@  @  @@  @@@@@@@@@@@@@@@
+@  @@@@@@@@@  @  @@@  @@  @  @@ @@@@@@@@@@@@@@@@
+@  @@@@@@@@@@   @@@@  @@  @   @@@@@@@@@@@@@@@@@@
+@  @@@@@@@@@@  @@@@@  @@  @@    @@@@@@@@@@@@@@@@
+@  @@@@@@@@@  @@@@@@  @@  @@@@@  @@@@@@@@@@@@@@@
+@  @@@@@@@@  @@@@@@@      @@@@  @@@@@@@@=====@@@
+    @@@@@@    @@@@@@@    @@@    @@@@@@@@|1.0|@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=====@@@
 """
     if TITLESTYLE==1:
         print(title1)
@@ -72,6 +81,8 @@ def printtitle(TITLESTYLE):
     print("Using python version:\n"+sys.version)
     print("")
 #End Function
+
+#输出提示符
 class stdout:
     LOG="[*]"
     WARN="[!]"
@@ -83,6 +94,7 @@ class stdout:
     STDPATH = ["/"]
 #End Class
 
+#所有程序命令
 class cmdfunc:
     def echo(echoin):
         print(echoin)
@@ -99,12 +111,18 @@ class cmdfunc:
             print("""r;rb;r+;rb+;w;wb;w+;wb+;a;ab;a+;ab+""")
     #End Function
     def cd(cdpath):
-        global STDPATH
-        cdpath = cdpath.split('/')
-        STDPATH=cdpath
-                
+
+        if os.path.exists(cdpath) and os.path.isdir(cdpath):
+            STDPATH=cdpath
+        else:
+            print(stdout.ERROR+cdpath+":Not a dictonary")
+    def lsf():
+        print(os.listdir(STDPATH))
+
+#输入                
 def cmd():
     global stdin
+#输入提示符
     stdin = input(USERLIST[USERINDEX]+"@pyos["+('/'.join(STDPATH))+"]-"+CMDOG)
     stdin = stdin.split(" ")
     try:
@@ -132,12 +150,14 @@ def cmd():
     elif stdin[0]=="cd":
         cmdfunc.cd(stdin[1])
     elif stdin[0]=="clear":
-        os.system("cls")
+        r.run("cls",shell=True)
     else:
         print(stdout.ERROR+"-error:Command Not Found!")
-    
+
+#主程序运行
 def main():
     global OSLOGIN,USERINDEX,CMDOG,INPASSWD
+    global STDPATH
     while True:
         OSLOGIN=input("Login pyos:")
         if OSLOGIN=="OPERATOR":
@@ -169,18 +189,38 @@ def main():
     
 
 if __name__ == "__main__":
-    os.system("cls")
+    #Run command:r
+    if os.path.exists('osvdisk'):
+        r.run('cd /osvdisk',shell=True)
+    else:
+        r.run(r'.\\init.bat')
+
+    print("Debug message:")
+    print("[Working path]"+os.getcwd())
+    print("[Time]"+time.asctime())
+    
+    r.run("cls",shell=True)
+    print("===========[Starting pyos system]==============")
     printtitle(random.randint(1,3))
-    with open("check.db",'r') as check:
-        Chk = check.read()
-        if Chk["USER_CHANGED"] == "NO":
-            with open("passwd.json","w") as savpasswd:
-                json.dump(USERPASSWD,savpasswd)
-                savpasswd.close()
-                pass
-        check.close()
-        pass
-    main()
+    while True:
+        try:
+            main()
+        except KeyboardInterrupt:
+            print("You push the Control-C.")
+            print("The program will stop!")
+            sdsgefhhgh = input('Are you sure to stop?[y/n](Default=n)')
+            if sdsgefhhgh.lower() == 'y':
+                sys.exit()
+            else:
+                continue
+        except:
+            """
+            print("There is an error while running.")
+            print(stdout.DEBUG+"Application Shutdown!")
+            print(stdout.ERROR+"pyos exited.")
+            sys.exit()"""
+            pass
+        
 
 
 
