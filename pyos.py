@@ -63,7 +63,7 @@ def printtitle(TITLESTYLE):
 @  @@@@@@@@@@   @@@@  @@  @   @@@@@@@@@@@@@@@@@@
 @  @@@@@@@@@@  @@@@@  @@  @@    @@@@@@@@@@@@@@@@
 @  @@@@@@@@@  @@@@@@  @@  @@@@@  @@@@@@@@@@@@@@@
-@  @@@@@@@@  @@@@@@@      @@@@  @@@@@@@@=====@@@
+@  @@@@@@@@  @@@@@@@      @ @@  @@@@@@@@=====@@@
     @@@@@@    @@@@@@@    @@@    @@@@@@@@|1.0|@@@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=====@@@
 """
@@ -108,7 +108,7 @@ class cmdfunc:
         except ValueError as ERROR:
             print(ERROR)
             print("Options List:")
-            print("""r;rb;r+;rb+;w;wb;w+;wb+;a;ab;a+;ab+""")
+            print("""r;rb;r+;rb+""")
     #End Function
     def cd(cdpath):
 
@@ -116,8 +116,8 @@ class cmdfunc:
             STDPATH=cdpath
         else:
             print(stdout.ERROR+cdpath+":Not a dictonary")
-    def lsf():
-        print(os.listdir(STDPATH))
+    def lsf(cdpath):
+        print(os.listdir(cdpath))
 
 #输入                
 def cmd():
@@ -134,7 +134,7 @@ def cmd():
         try:
             print(stdin[1])
         except IndexError as ERROR:
-            print(ERROR)
+            print("ECHO OPENED.")
             pass
     elif stdin[0]=="exit":
         sys.exit()
@@ -142,15 +142,22 @@ def cmd():
         try:
             cmdfunc.textread(stdin[1],stdin[2])
         except IndexError as ERROR:
-            print(ERROR)
+            print("Please enter both option and filename")
             pass
         except FileNotFoundError as ERROR:
-            print(ERROR)
+            print(stdout.ERROR+"File Not Found!")
             pass
     elif stdin[0]=="cd":
         cmdfunc.cd(stdin[1])
     elif stdin[0]=="clear":
         r.run("cls",shell=True)
+    elif stdin[0]=="lsf":
+        try:
+            cmdfunc.lsf(stdin[1])
+        except IndexError:
+            cmdfunc.lsf("/")
+    elif stdin[0]=="help":
+        print('echo lsf clear help cd textread exit')
     else:
         print(stdout.ERROR+"-error:Command Not Found!")
 
@@ -190,6 +197,7 @@ def main():
 
 if __name__ == "__main__":
     #Run command:r
+ #   print(r.run('chdir',shell=True))
     if os.path.exists('osvdisk'):
         r.run('cd /osvdisk',shell=True)
     else:
@@ -200,7 +208,7 @@ if __name__ == "__main__":
     print("[Time]"+time.asctime())
     
     r.run("cls",shell=True)
-    print("===========[Starting pyos system]==============")
+    print("===================[Starting pyos system]=====================")
     printtitle(random.randint(1,3))
     while True:
         try:
@@ -213,14 +221,7 @@ if __name__ == "__main__":
                 sys.exit()
             else:
                 continue
-        except:
-            """
-            print("There is an error while running.")
-            print(stdout.DEBUG+"Application Shutdown!")
-            print(stdout.ERROR+"pyos exited.")
-            sys.exit()"""
-            pass
-        
+
 
 
 
